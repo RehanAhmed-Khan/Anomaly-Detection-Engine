@@ -2,9 +2,9 @@ package ingestion
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"telecom_anomaly_engine/internal/domain"
+	"telecom_anomaly_engine/internal/streaming"
 )
 
 func MetriHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +23,9 @@ func MetriHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Print the decoded message
-	fmt.Printf("Received: %+v\n", metric)
+	// fmt.Printf("Received: %+v\n", metric)
+
+	streaming.MetricsChannel <- metric
 
 	//Send success Response
 	w.WriteHeader(http.StatusOK)

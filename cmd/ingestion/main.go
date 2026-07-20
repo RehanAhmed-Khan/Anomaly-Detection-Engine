@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"telecom_anomaly_engine/internal/ingestion"
+	"telecom_anomaly_engine/internal/streaming"
 )
 
 func main() {
@@ -13,6 +14,11 @@ func main() {
 
 	//mapping the route
 	mux.HandleFunc("/metrics", ingestion.MetriHandler)
+
+	/*Start worker*/
+	for i := 1; i <= 5; i++ {
+		go streaming.StartWorker(i)
+	}
 
 	server := &http.Server{
 		Addr:    ":8080",
